@@ -1,9 +1,14 @@
 import numpy as np
+import torch
 from sentence_transformers import SentenceTransformer
+from typing import Optional
+
+# Limit threads to reduce memory footprint on Render
+torch.set_num_threads(1)
 
 # Load model once at module level (singleton — avoids reloading on every call)
 _MODEL_NAME = "all-MiniLM-L6-v2"
-_model: SentenceTransformer | None = None
+_model: Optional[SentenceTransformer] = None
 
 
 def _get_model() -> SentenceTransformer:
