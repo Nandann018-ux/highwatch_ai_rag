@@ -29,8 +29,12 @@ Follow these steps exactly to run the project on your local machine.
 5. Go to **APIs & Services → Credentials**.
 6. Click **"+ Create Credentials"** → Choose **"OAuth 2.0 Client ID"**.
 7. Application Type: **Web Application**.
-8. Under **Authorized JavaScript origins**, add: `http://localhost:8000`
-9. Under **Authorized redirect URIs**, add: `http://localhost:8000/auth/callback`
+8. Under **Authorized JavaScript origins**, add:
+   - `http://localhost:8000`
+   - `https://your-app-name.onrender.com` (for deployment)
+9. Under **Authorized redirect URIs**, add:
+   - `http://localhost:8000/auth/callback`
+   - `https://your-app-name.onrender.com/auth/callback` (for deployment)
 10. Click Create. Copy your `Client ID` and `Client Secret`.
 
 ### 3. Setup the Project
@@ -137,3 +141,26 @@ A good RAG system must refuse to answer questions if the information is not in t
 | `Scope has changed from X to Y` | Handled automatically! We use `OAUTHLIB_RELAX_TOKEN_SCOPE=1`. |
 | `Model decommissioned` | Handled! We are using the newest `llama-3.3-70b-versatile` model. |
 | `ModuleNotFoundError` | Ensure you activated your virtual environment before running `uvicorn main:app`. |
+
+---
+
+## ☁️ Deployment on Render (Free Tier)
+
+This repository is optimized to run on **Render's Free Tier** (512MB RAM).
+
+### 1. Simple Deploy
+Click the **"Deploy to Render"** button in your dashboard and connect this repo.
+
+### 2. Required Environment Variables
+Configure these in the Render Dashboard:
+- `GOOGLE_CLIENT_ID`: Your Google OAuth Client ID.
+- `GOOGLE_CLIENT_SECRET`: Your Google OAuth Client Secret.
+- `GROQ_API_KEY`: Your Groq API Key.
+- `GEMINI_API_KEY`: Your Google Gemini API Key (Required for optimized embeddings).
+- `EMBEDDING_PROVIDER`: Set to `gemini` (highly recommended for Free Tier).
+- `LLM_PROVIDER`: Set to `groq`.
+
+### 3. Optimization Features
+- **Low RAM Footprint:** By setting `EMBEDDING_PROVIDER=gemini`, the app uses the Gemini API for vectorization, saving ~300MB of RAM.
+- **Resource Limiting:** FAISS and Torch are constrained to a single thread to prevent CPU/RAM spikes.
+- **CPU-Only Build:** The Docker image is optimized with the CPU version of Torch to minimize size and overhead.

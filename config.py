@@ -18,6 +18,7 @@ else:
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 LLM_PROVIDER = os.getenv("LLM_PROVIDER", "groq")  # "groq" or "gemini"
+EMBEDDING_PROVIDER = os.getenv("EMBEDDING_PROVIDER", "local")  # "local" or "gemini"
 
 # ── Storage ───────────────────────────────────────────────────────────────────
 STORAGE_DIR = os.getenv("STORAGE_DIR", "./storage")

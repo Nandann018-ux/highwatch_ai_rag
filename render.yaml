@@ -3,7 +3,7 @@ services:
     name: highwatch-rag
     env: docker
     region: oregon
-    plan: starter
+    plan: free
     dockerfilePath: ./Dockerfile
     healthCheckPath: /status
     envVars:
@@ -12,18 +12,20 @@ services:
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: GOOGLE_REDIRECT_URI
-        value: "https://highwatch-rag.onrender.com/auth/callback"
+        sync: false
       - key: GROQ_API_KEY
         sync: false
       - key: GEMINI_API_KEY
         sync: false
       - key: LLM_PROVIDER
         value: "groq"
+      - key: EMBEDDING_PROVIDER
+        value: "gemini"
       - key: STORAGE_DIR
-        value: "/data/storage"
+        value: "storage"
       - key: DOWNLOAD_DIR
-        value: "/data/downloads"
-    disk:
-      name: rag-data
-      mountPath: /data
-      sizeGB: 1
+        value: "downloads"
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: PORT
+        value: "8000"

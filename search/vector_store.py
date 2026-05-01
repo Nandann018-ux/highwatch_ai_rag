@@ -6,7 +6,8 @@ import faiss
 from typing import Optional, Union, List
 from config import get_faiss_index_path, get_metadata_path
 
-EMBEDDING_DIM = 384
+# Limit FAISS threads for Render memory efficiency
+faiss.omp_set_num_threads(1)
 
 
 def _load_metadata() -> dict:
@@ -58,7 +59,9 @@ def add_chunks(chunks: list[dict], embeddings: np.ndarray):
 
     index = _load_index()
     if index is None:
-        index = faiss.IndexFlatIP(EMBEDDING_DIM)
+        dim = embeddings.shape[1]
+        print(f"[VectorStore] Initializing new FAISS index with dim={dim}")
+        index = faiss.IndexFlatIP(dim)
 
     metadata = _load_metadata()
     offset = index.ntotal
