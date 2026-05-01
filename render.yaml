@@ -2,18 +2,28 @@ services:
   - type: web
     name: highwatch-rag
     env: docker
+    region: oregon
+    plan: starter
     dockerfilePath: ./Dockerfile
-    plan: free # Change to "starter" if you need persistent disks
+    healthCheckPath: /status
     envVars:
       - key: GOOGLE_CLIENT_ID
-        sync: false # Set this in Render Dashboard
+        sync: false
       - key: GOOGLE_CLIENT_SECRET
-        sync: false # Set this in Render Dashboard
+        sync: false
       - key: GOOGLE_REDIRECT_URI
-        value: "https://highwatch-rag.onrender.com/auth/callback" # Update if you use a custom domain
+        value: "https://highwatch-rag.onrender.com/auth/callback"
       - key: GROQ_API_KEY
-        sync: false # Set this in Render Dashboard
+        sync: false
       - key: GEMINI_API_KEY
-        sync: false # Optional, set if LLM_PROVIDER=gemini
+        sync: false
       - key: LLM_PROVIDER
         value: "groq"
+      - key: STORAGE_DIR
+        value: "/data/storage"
+      - key: DOWNLOAD_DIR
+        value: "/data/downloads"
+    disk:
+      name: rag-data
+      mountPath: /data
+      sizeGB: 1
