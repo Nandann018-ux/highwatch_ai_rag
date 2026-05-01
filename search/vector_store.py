@@ -3,36 +3,46 @@ import json
 import numpy as np
 import faiss
 
-from config import FAISS_INDEX_PATH, METADATA_PATH
+from typing import Optional, Union, List
+from config import get_faiss_index_path, get_metadata_path
 
-# FAISS dimension must match the embedding model output (all-MiniLM-L6-v2 = 384)
 EMBEDDING_DIM = 384
 
 
 def _load_metadata() -> dict:
     """Load chunk metadata from JSON file."""
-    if not os.path.exists(METADATA_PATH):
+    path = get_metadata_path()
+    if not os.path.exists(path):
         return {}
-    with open(METADATA_PATH, "r") as f:
-        return json.load(f)
+    try:
+        with open(path, "r") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, Exception) as e:
+        print(f"[VectorStore] Error loading metadata: {e}. Returning empty dict.")
+        return {}
 
 
 def _save_metadata(metadata: dict):
     """Save chunk metadata to JSON file."""
-    with open(METADATA_PATH, "w") as f:
+    with open(get_metadata_path(), "w") as f:
         json.dump(metadata, f, indent=2)
 
 
-def _load_index() -> faiss.Index | None:
+def _load_index() -> Optional[faiss.Index]:
     """Load FAISS index from disk. Returns None if not found."""
-    if not os.path.exists(FAISS_INDEX_PATH):
+    path = get_faiss_index_path()
+    if not os.path.exists(path):
         return None
-    return faiss.read_index(FAISS_INDEX_PATH)
+    try:
+        return faiss.read_index(path)
+    except Exception as e:
+        print(f"[VectorStore] Error loading FAISS index: {e}. Returning None.")
+        return None
 
 
 def _save_index(index: faiss.Index):
     """Save FAISS index to disk."""
-    faiss.write_index(index, FAISS_INDEX_PATH)
+    faiss.write_index(index, get_faiss_index_path())
 
 
 def add_chunks(chunks: list[dict], embeddings: np.ndarray):
@@ -46,25 +56,17 @@ def add_chunks(chunks: list[dict], embeddings: np.ndarray):
     if len(chunks) == 0:
         return
 
-    # Load or create FAISS index
     index = _load_index()
     if index is None:
-        index = faiss.IndexFlatIP(EMBEDDING_DIM)  # Inner Product (cosine after normalization)
+        index = faiss.IndexFlatIP(EMBEDDING_DIM)
 
-    # Load existing metadata
     metadata = _load_metadata()
-
-    # Current offset = number of existing vectors
     offset = index.ntotal
-
-    # Add embeddings to FAISS index
+    
     index.add(embeddings)
-
-    # Add metadata at corresponding positions
     for i, chunk in enumerate(chunks):
         metadata[str(offset + i)] = chunk
 
-    # Persist
     _save_index(index)
     _save_metadata(metadata)
     print(f"[VectorStore] Added {len(chunks)} chunks. Total: {index.ntotal}")
@@ -87,7 +89,6 @@ def search(query_embedding: np.ndarray, top_k: int = 5) -> list[dict]:
 
     metadata = _load_metadata()
 
-    # Clamp top_k to available chunks
     top_k = min(top_k, index.ntotal)
 
     scores, indices = index.search(query_embedding, top_k)
@@ -114,10 +115,26 @@ def get_index_stats() -> dict:
     }
 
 
+def get_sample_chunks(n: int = 5) -> list[str]:
+    """Retrieve up to n random chunks to provide context for dynamic AI recommendations."""
+    import random
+    metadata = _load_metadata()
+    if not metadata:
+        return []
+    
+    # Take up to n random chunks
+    keys = list(metadata.keys())
+    if len(keys) > n:
+        keys = random.sample(keys, n)
+        
+    return [metadata[k].get("chunk_text", "") for k in keys]
+
+
 def clear_index():
     """Delete the FAISS index and metadata (for fresh re-sync)."""
-    if os.path.exists(FAISS_INDEX_PATH):
-        os.remove(FAISS_INDEX_PATH)
-    if os.path.exists(METADATA_PATH):
-        os.remove(METADATA_PATH)
+    if os.path.exists(get_faiss_index_path()):
+        os.remove(get_faiss_index_path())
+    if os.path.exists(get_metadata_path()):
+        os.remove(get_metadata_path())
     print("[VectorStore] Index cleared.")
+
