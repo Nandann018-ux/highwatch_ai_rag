@@ -1,4 +1,4 @@
-# PROJECT SPECIFICATION — Highwatch AI RAG System
+# PROJECT SPECIFICATION — DriveLens RAG System
 # AI Platform Engineer Trial Assignment
 
 ---
@@ -341,7 +341,7 @@ answer = response.text
 #### Routes:
 
 **`GET /`**
-- Returns: `{ "status": "ok", "message": "Highwatch AI RAG API is running" }`
+- Returns: `{ "status": "ok", "message": "DriveLens RAG API is running" }`
 
 **`GET /auth/login`**
 - Redirects user to Google OAuth consent URL
@@ -409,7 +409,7 @@ from api.routes import router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
-    title="Highwatch AI RAG System",
+    title="DriveLens RAG System",
     description="ChatGPT over your Google Drive",
     version="1.0.0"
 )
