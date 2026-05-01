@@ -12,7 +12,7 @@ def _build_prompt(query: str, context_chunks: list[dict]) -> str:
 
     context_str = "\n\n---\n\n".join(context_parts)
 
-    prompt = f"""You are a helpful AI assistant for Highwatch AI. Answer the user's question based ONLY on the provided context documents below.
+    prompt = f"""You are a helpful AI assistant for DriveLens. Answer the user's question based ONLY on the provided context documents below.
 
 Rules:
 - If the answer is clearly found in the documents, answer it concisely and accurately.
@@ -91,10 +91,54 @@ def generate_answer(query: str, context_chunks: list[dict]) -> dict:
         if fname not in sources_dict:
             sources_dict[fname] = chunk.get("doc_id", "")
             
-    sources = [{"name": name, "link": f"https://drive.google.com/file/d/{doc_id}/view" if doc_id else "#"} for name, doc_id in sources_dict.items()]
+    sources = []
+    for name, doc_id in sources_dict.items():
+        if not doc_id or "/" in doc_id or "\\" in doc_id:
+            # If doc_id is a local file path (from gdown), don't link to Drive
+            link = "#"
+        else:
+            link = f"https://drive.google.com/file/d/{doc_id}/view"
+        sources.append({"name": name, "link": link})
 
     return {
         "answer": answer,
         "sources": sources,
         "chunks_used": len(context_chunks),
     }
+
+
+def generate_recommendations(sample_chunks: list[str]) -> list[str]:
+    """Generate 3 suggested questions based on document content."""
+    if not sample_chunks:
+        return [
+            "What is our refund policy?",
+            "Summarize IT security SOP",
+            "What are the compliance guidelines?"
+        ]
+
+    context_str = "\n\n".join(sample_chunks)
+    prompt = f"""Based on the following snippets from a user's personal documents, suggest 3 natural language questions that the user might want to ask. 
+Keep the questions short, diverse, and relevant to the content.
+Return ONLY the questions, one per line, without numbers or bullets.
+
+Document Snippets:
+---
+{context_str}
+---
+
+Suggested Questions:"""
+
+    try:
+        if LLM_PROVIDER == "gemini":
+            raw_output = _call_gemini(prompt)
+        else:
+            raw_output = _call_groq(prompt)
+        
+        questions = [q.strip() for q in raw_output.split("\n") if q.strip()][:3]
+        return questions
+    except Exception:
+        return [
+            "What is our refund policy?",
+            "Summarize IT security SOP",
+            "What are the compliance guidelines?"
+        ]
