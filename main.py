@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse
 from api.routes import router
 
 app = FastAPI(
-    title="Highwatch AI — RAG System",
+    title="DriveLens — RAG System",
     description=(
         "A Retrieval-Augmented Generation (RAG) API that connects to Google Drive, "
         "processes documents, and answers questions grounded in your own files."
@@ -31,6 +31,10 @@ app.include_router(router)
 import os
 os.makedirs("frontend", exist_ok=True)
 app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
+# Serve demo docs
+os.makedirs("demo_docs", exist_ok=True)
+app.mount("/demo_docs", StaticFiles(directory="demo_docs"), name="demo_docs")
 
 @app.get("/", tags=["Frontend"])
 def serve_frontend():
