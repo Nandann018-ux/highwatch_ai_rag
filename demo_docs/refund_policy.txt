@@ -1,0 +1,17 @@
+# PRODUCT REFUND AND CANCELLATION POLICY
+Internal Sales Guidelines
+
+## 1. REFUND ELIGIBILITY
+Customers are eligible for a full refund within 14 days of purchase, provided that less than 20% of the allocated credits have been used. 
+
+## 2. PARTIAL REFUNDS
+Partial refunds (50%) are available between 15 and 30 days of purchase. No refunds are granted after 30 days.
+
+## 3. CANCELLATION PROCESS
+Subscription cancellations must be submitted via the Billing Portal. Cancellations take effect at the end of the current billing cycle. No pro-rata refunds are provided for mid-cycle cancellations.
+
+## 4. EXCEPTIONS
+Refunds for technical failures or service downtime exceeding 99.9% in a single month are handled on a case-by-case basis by the Customer Success Team.
+
+## 5. PROCESSING TIME
+Approved refunds are processed within 5-7 business days to the original payment method.

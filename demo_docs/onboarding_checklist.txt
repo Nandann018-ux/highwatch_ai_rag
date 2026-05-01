@@ -1,0 +1,24 @@
+# NEW HIRE ONBOARDING CHECKLIST
+First Week Requirements
+
+## DAY 1: ARRIVAL AND SETUP
+- [ ] Attend Orientation at 9:00 AM
+- [ ] Collect Laptop and Access Badge
+- [ ] Set up Email and Slack accounts
+- [ ] Complete IT Security MFA setup
+
+## DAY 2-3: DEPARTMENTAL IMMERSION
+- [ ] Meet with Department Head for goals overview
+- [ ] Review Team Documentation in Confluence
+- [ ] Shadow a Senior Engineer or Team Member
+- [ ] Set up Local Development Environment
+
+## DAY 4: COMPLIANCE AND HR
+- [ ] Complete Anti-Harassment Training
+- [ ] Submit Tax and Bank Detail forms
+- [ ] Review the Employee Handbook and Code of Conduct
+
+## DAY 5: WRAP-UP
+- [ ] Finalize 30-day goal plan with Manager
+- [ ] Attend Friday Demo/Team lunch
+- [ ] Ensure all system access is functioning correctly
