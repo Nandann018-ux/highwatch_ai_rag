@@ -3,82 +3,344 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Highwatch AI | Personal RAG</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>DriveLens — Workspace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <header>
-            <div class="logo">
-                <div class="logo-icon"></div>
-                <h1>Highwatch AI</h1>
+<body class="light">
+    <div class="app-container">
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar">
+            <div class="brand" onclick="showPage('overview')" style="cursor: pointer;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" style="color: var(--accent);"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle><path d="M12 2L12 5M12 19L12 22M2 12L5 12M19 12L22 12"></path></svg>
+                DRIVELENS
             </div>
-            <div class="status-badge" id="auth-status">
-                <span class="dot red"></span> Not Connected
+            
+            <div class="nav-section">
+                <span class="nav-section-label">Workspace</span>
+                <nav class="nav-group">
+                    <div class="nav-link active" data-page="overview">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                        Overview
+                    </div>
+                    <div class="nav-link" data-page="sync">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 2v6h-6M3 22v-6h6M18 5a9 9 0 00-15 4.7M6 19a9 9 0 0015-4.7"></path></svg>
+                        Sync Center
+                    </div>
+                    <div class="nav-link" data-page="documents">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        Library
+                    </div>
+                    <div class="nav-link" data-page="ask">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"></path></svg>
+                        Ask AI
+                    </div>
+                </nav>
             </div>
-        </header>
 
-        <div class="main-content">
-            <!-- Sidebar / Controls -->
-            <aside class="controls-panel">
-                <div class="card">
-                    <h2>1. Connect Google Drive</h2>
-                    <p>Authenticate with your Google account to grant access to your documents.</p>
-                    <button id="btn-connect" class="btn primary">
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M21.2 7.2l-3.4-3.4c-.8-.8-2-.8-2.8 0L3 16l-1 5 5-1 12.2-12c.8-.8.8-2 0-2.8z"></path></svg>
-                        Connect Drive
-                    </button>
+            <div class="nav-section" style="margin-top: 1.5rem;">
+                <span class="nav-section-label">System</span>
+                <nav class="nav-group">
+                    <div class="nav-link" data-page="settings">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>
+                        Settings
+                    </div>
+                    <div class="nav-link" id="theme-toggle">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line></svg>
+                        Theme Mode
+                    </div>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- ── Main View ── -->
+        <main class="main-view">
+            <header class="workspace-header" id="workspace-header">
+                <div class="header-content">
+                    <h2 id="page-title"></h2>
+                    <p id="page-subtitle"></p>
+                </div>
+                <div class="header-actions" id="header-actions">
+                    <!-- Contextual actions injected here -->
+                </div>
+            </header>
+
+            <div class="content-inner">
+                <!-- Page: Overview -->
+                <div id="page-overview" class="page-container page-fade-in">
+                    <!-- Hero Section -->
+                    <div class="onboarding-hero">
+                        <div class="badge-indigo" style="width: fit-content; margin-bottom: 1rem;">GET STARTED</div>
+                        <h1 style="font-size: 2.5rem; margin-bottom: 1rem; letter-spacing: -0.03em;">Welcome to DriveLens.</h1>
+                        <p style="font-size: 1.125rem; color: var(--text-dim); max-width: 600px; line-height: 1.6;">
+                            Transform your static document repositories into an intelligent, queryable knowledge base. Choose your starting path below to begin.
+                        </p>
+                    </div>
+
+                    <!-- Dual Path Choice -->
+                    <div class="asymmetric-grid" style="margin-bottom: 3rem;">
+                        <div class="editorial-card path-card drive-path">
+                            <div class="path-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19L19 5H5L2 19H22Z"/><path d="M12 5V19"/><path d="M5 19L12 5L19 19"/></svg></div>
+                            <h3 class="card-title">Connect Your Knowledge Source</h3>
+                            <p class="card-desc">Choose how you want to start. Connect your full account for a deep integration or paste a specific folder for faster testing.</p>
+                            
+                            <div class="source-options">
+                                <div style="margin-top: 2rem;">
+                                <button class="btn btn-accent" id="btn-sync-index" onclick="startIndexing()" style="width: 100%; padding: 1rem;">Begin Indexing</button>
+                                <div id="sync-success-cta" style="display: none; margin-top: 1rem; animation: fadeIn 0.4s ease;">
+                                    <div class="badge-indigo" style="background: var(--accent-soft); color: var(--accent); margin-bottom: 1rem; width: 100%; text-align: center; border-radius: 8px; padding: 0.75rem;">
+                                        KNOWLEDGE BASE READY
+                                    </div>
+                                    <button class="btn btn-accent" onclick="navigateTo('ask')" style="width: 100%; padding: 1rem;">Go to Ask AI</button>
+                                </div>
+                            </div>
+                                
+                                <div class="source-divider">
+                                    <span>OR</span>
+                                </div>
+                                
+                                <div class="source-opt-b">
+                                    <div class="input-group">
+                                        <input type="text" id="hero-folder-link" placeholder="Paste Drive folder link or ID" class="form-input">
+                                        <button class="btn btn-ghost" onclick="indexFromHero()" id="btn-hero-sync">Index Folder</button>
+                                    </div>
+                                    <p class="helper-text">Supports /folders/{id} or direct folder ID</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="editorial-card path-card demo-path">
+                            <div class="path-icon" style="color: var(--accent-teal);"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16V12"/><path d="M12 8H12.01"/></svg></div>
+                            <h3 class="card-title">Instant Sandbox</h3>
+                            <p class="card-desc">No setup required. Load our pre-configured corporate policy corpus to test the RAG engine instantly.</p>
+                            
+                            <div class="sandbox-actions" style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                                <button class="btn btn-ghost" id="btn-hero-demo" style="border-color: var(--accent-teal); color: var(--accent-teal); width: 100%;" onclick="startDemoSync()">Sync Demo Corpus</button>
+                                <button class="btn btn-accent" id="btn-discovery-ask" style="width: 100%; opacity: 0.4; cursor: not-allowed;" onclick="navigateTo('ask')" disabled>Ask AI (Locked)</button>
+                                <p id="sandbox-helper" class="helper-text" style="text-align: center; font-size: 0.7rem; margin: 0;">Sync demo corpus first to unlock Ask AI.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Reviewer Sandbox ── -->
+                    <div class="sandbox-section" style="margin-bottom: 4rem;">
+                        <div class="sandbox-header" style="margin-bottom: 1.5rem;">
+                            <h4 class="checklist-label" style="text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; color: var(--text-dim);">Reviewer Sandbox</h4>
+                            <p class="card-desc" style="font-size: 0.85rem; margin-top: 0.5rem;">Use this shared evaluation folder to test live Drive indexing. Pre-validated documents are ready for immediate synchronization.</p>
+                        </div>
+                        <div class="editorial-card sandbox-card" style="padding: 1.5rem; border-style: dashed; background: var(--bg-sidebar);">
+                            <div class="sandbox-row" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem;">
+                                <div class="sandbox-info" style="flex: 1; overflow: hidden; margin-right: 1.5rem;">
+                                    <label class="helper-text" style="display: block; margin-bottom: 0.25rem;">Shared Drive Link</label>
+                                    <div class="sandbox-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-title); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="https://drive.google.com/drive/folders/1nAddt9FZxKXFBPaNXAf-nRNnMf9JRvig?usp=sharing">https://drive.google.com/drive/folders/1nAddt9FZxKXFBPaNXAf-nRNnMf9JRvig?usp=sharing</div>
+                                </div>
+                                <button class="btn btn-ghost btn-sm" id="btn-copy-url" style="padding: 0.4rem 0.8rem; font-size: 0.7rem; min-width: 100px;" onclick="copyToClipboard(SHARED_TEST_FOLDER.url, 'btn-copy-url', 'Drive link copied')">Copy Link</button>
+                            </div>
+                            <div class="sandbox-row" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem;">
+                                <div class="sandbox-info" style="flex: 1; overflow: hidden; margin-right: 1.5rem;">
+                                    <label class="helper-text" style="display: block; margin-bottom: 0.25rem;">Folder ID</label>
+                                    <div class="sandbox-value" style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-title); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="1nAddt9FZxKXFBPaNXAf-nRNnMf9JRvig">1nAddt9FZxKXFBPaNXAf-nRNnMf9JRvig</div>
+                                </div>
+                                <button class="btn btn-ghost btn-sm" id="btn-copy-id" style="padding: 0.4rem 0.8rem; font-size: 0.7rem; min-width: 100px;" onclick="copyToClipboard(SHARED_TEST_FOLDER.id, 'btn-copy-id', 'Folder ID copied')">Copy ID</button>
+                            </div>
+                            <div class="sandbox-footer" style="display: flex; align-items: center; gap: 1.5rem;">
+                                <button class="btn btn-accent btn-sm" onclick="useSharedFolder()">Use This Folder</button>
+                                <p class="helper-text" style="margin: 0; opacity: 0.7;">Note: This is a public test folder for evaluation. Demo docs are also available above for instant testing.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Setup Checklist -->
+                    <div class="checklist-section" style="margin-bottom: 4rem;">
+                        <h4 class="checklist-label" style="text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; color: var(--text-dim); margin-bottom: 1.5rem;">System Readiness</h4>
+                        <div class="checklist-grid">
+                            <div class="check-item" id="check-auth">
+                                <div class="check-box">1</div>
+                                <div class="checklist-label">Connect Source</div>
+                            </div>
+                            <div class="check-item" id="check-index">
+                                <div class="check-box">2</div>
+                                <div class="check-label">Index Documents</div>
+                            </div>
+                            <div class="check-item" id="check-library">
+                                <div class="check-box">3</div>
+                                <div class="check-label">Review Library</div>
+                            </div>
+                            <div class="check-item" id="check-ask">
+                                <div class="check-box">4</div>
+                                <div class="checklist-label">Start Inquiring</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Demo Sandbox Zone (Visible after sync or for orientation) -->
+                    <div class="editorial-card" id="demo-sandbox-zone" style="background: var(--accent-soft); border-color: var(--accent);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <h3 class="card-title">Demo Question Bank</h3>
+                                <p class="card-desc">Once indexed, try these sample questions grounded in the demo documents.</p>
+                            </div>
+                            <span class="badge-indigo">READY TO TEST</span>
+                        </div>
+                        <div class="quick-prompts-grid" style="margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                            <button class="btn btn-ghost" onclick="prefillQ('What are the password requirements?')">IT Security Rules</button>
+                            <button class="btn btn-ghost" onclick="prefillQ('How many PTO days do I get?')">Leave Policy</button>
+                            <button class="btn btn-ghost" onclick="prefillQ('Who approves travel expenses?')">Expense Approvals</button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Row (Secondary) -->
+                    <div class="hero-status" style="margin-top: 3rem;">
+                        <div class="hero-stats">
+                            <div class="stat-block">
+                                <span class="stat-label">Neural Index</span>
+                                <span class="stat-value" id="kpi-chunks-ov">0</span>
+                            </div>
+                            <div class="stat-block">
+                                <span class="stat-label">Library</span>
+                                <span class="stat-value" id="kpi-docs-ov">0</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-ghost" onclick="showPage('documents')">View All Documents</button>
+                    </div>
                 </div>
 
-                <div class="card">
-                    <h2>2. Sync Documents</h2>
-                    <p>Fetch PDFs, Docs, and TXTs from your Drive and build the RAG index.</p>
-                    <button id="btn-sync" class="btn secondary" disabled>
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-                        Sync Now
-                    </button>
-                    <div id="sync-status" class="status-text"></div>
-                </div>
+                <!-- Page: Sync (Sub-Nav Enabled) -->
+                <div id="page-sync" class="page-container page-fade-in hidden">
+                    <div class="local-tabs">
+                        <button class="tab-link active" data-tab="auth">Authentication</button>
+                    <button class="tab-link" data-tab="indexing">Indexing</button>
+                    <button class="tab-link" data-tab="demo">Demo Corpus</button>
+                    </div>
 
-                <div class="card metrics" id="index-metrics">
-                    <h3>Index Stats</h3>
-                    <div class="metric-row">
-                        <span>Status:</span>
-                        <strong id="metric-status">Empty</strong>
+                    <div id="sync-tab-auth" class="tab-pane">
+                        <div class="editorial-card" style="max-width: 600px;">
+                            <h3 class="card-title">Google Drive Connection</h3>
+                            <p class="card-desc">Linking your drive allows DriveLens to securely index your documents for grounding.</p>
+                            <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                                <button id="btn-connect" class="btn btn-accent">Link Account</button>
+                                <button id="btn-disconnect" class="btn btn-ghost" disabled>Unlink</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="metric-row">
-                        <span>Docs Indexed:</span>
-                        <strong id="metric-docs">0</strong>
-                    </div>
-                    <div class="metric-row">
-                        <span>Total Chunks:</span>
-                        <strong id="metric-chunks">0</strong>
-                    </div>
-                </div>
-            </aside>
 
-            <!-- Chat / RAG Interface -->
-            <main class="chat-panel card">
-                <h2>Ask your Documents</h2>
-                <div class="chat-history" id="chat-history">
-                    <div class="message system">
-                        <div class="message-content">
-                            Hello! I am your AI assistant. Connect your Drive and sync your documents, then ask me anything about them!
+                    <div id="sync-tab-indexing" class="tab-pane hidden">
+                        <div class="editorial-card" style="max-width: 600px;">
+                            <h3 class="card-title">Target Corpus</h3>
+                            <p class="card-desc">Provide a Folder ID to narrow the sync scope, or leave blank for root.</p>
+                            <input type="text" id="folder-link" placeholder="Folder ID / Link" class="input-field" style="margin-top: 1.5rem;">
+                            <p class="helper-text" style="margin-top: 0.5rem;">Leave blank for root or <a href="#" style="color: var(--accent); font-weight: 700; text-decoration: none;" onclick="document.getElementById('folder-link').value=SHARED_TEST_FOLDER.id; return false;">Use Shared Test Folder</a></p>
+                            <button id="btn-sync" class="btn btn-accent" style="width: 100%; margin-top: 1rem;" disabled>Begin Sync</button>
+                        </div>
+                    </div>
+
+                    <div id="sync-tab-demo" class="tab-pane hidden">
+                        <div class="editorial-card" style="max-width: 600px;">
+                            <h3 class="card-title">Local Demo Pipeline</h3>
+                            <p class="card-desc">Populate the knowledge index with realistic corporate policy documents (Employee Handbook, IT Security, etc.) for demonstration purposes.</p>
+                            <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                                <button id="btn-sync-demo" class="btn btn-accent">Sync Demo Data</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="chat-input-area">
-                    <input type="text" id="chat-input" placeholder="e.g. What is our refund policy?" disabled>
-                    <button id="btn-send" class="btn primary" disabled>
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                    </button>
+
+                <!-- Page: Library -->
+                <div id="page-documents" class="page-container page-fade-in hidden">
+                    <div class="editorial-card" style="padding: 0; overflow: hidden;">
+                        <div class="table-header">
+                            <h3 class="card-title" style="margin:0;">Knowledge Library</h3>
+                            <span class="badge-indigo">TOTAL INDEXED: <span id="doc-count-label">0</span></span>
+                        </div>
+                        <div style="padding: 0 2rem;">
+                            <table class="editorial-table">
+                                <thead>
+                                    <tr>
+                                        <th>Identifier</th>
+                                        <th>Type</th>
+                                        <th>Density</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="docs-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </main>
+
+                <!-- Page: Ask (Editorial Chat) -->
+                <div id="page-ask" class="page-container page-fade-in hidden">
+                    <div class="chat-editorial">
+                        <div id="chat-history" class="chat-scroller">
+                            <div class="chat-bubble ai">
+                                <div class="chat-label">Neural Engine</div>
+                                <div class="chat-text">Welcome. Ask anything about your indexed documents.</div>
+                            </div>
+                        </div>
+                        <div id="quick-prompts" class="prompt-chips"></div>
+                        <div class="floating-input-wrap">
+                            <textarea id="chat-input" class="floating-textarea" placeholder="Inquire document context..." rows="1" disabled></textarea>
+                            <button id="btn-send" class="btn btn-accent" style="padding: 0.5rem 1rem;" disabled>Query</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page: Settings -->
+                <div id="page-settings" class="page-container page-fade-in hidden">
+                    <div style="max-width: 500px;">
+                        <div class="card-stack">
+                            <div class="editorial-card">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                                    <h3 class="card-title" style="margin: 0;">Retriever Depth</h3>
+                                    <span class="badge-indigo" id="depth-badge">TOP 5</span>
+                                </div>
+                                <p class="card-desc">Controls how many document fragments are retrieved for each query.</p>
+                                <div class="slider-container" style="margin-top: 1.5rem;">
+                                    <input type="range" id="depth-slider" min="1" max="12" value="5" class="range-slider">
+                                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+                                        <span>Focused</span>
+                                        <span>Comprehensive</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="editorial-card danger-card">
+                                <h3 class="card-title" style="color: #ef4444;">System Reset</h3>
+                                <p class="card-desc">Permanently wipe all indexed fragments and uncache credentials.</p>
+                                <button id="btn-clear" class="btn btn-ghost" style="color: #ef4444; border-color: #ef4444; width: 100%; margin-top: 1.5rem;" disabled>Factory Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- ── Context Drawer ── -->
+        <div id="context-drawer" class="drawer">
+            <div class="drawer-header">
+                <span class="drawer-label" id="drawer-title">Details</span>
+                <button onclick="toggleDrawer(false)" class="btn-close">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="drawer-body" id="drawer-content"></div>
         </div>
     </div>
+
+    <!-- Templates -->
+    <template id="tpl-drawer-sync">
+        <h4 class="drawer-section-title">Pipeline Monitor</h4>
+        <div id="sync-logs" class="mono-logs">
+            <div>[INIT] Monitoring sync...</div>
+        </div>
+    </template>
+
+    <template id="tpl-drawer-ask">
+        <h4 class="drawer-section-title">Retrieval Audit</h4>
+        <div id="retrieval-results"></div>
+    </template>
 
     <script src="/static/script.js"></script>
 </body>
