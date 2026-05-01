@@ -1,8 +1,10 @@
 import os
 import json
 import io
+from typing import Optional, Union, List
 
 os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import Flow
@@ -14,7 +16,7 @@ from config import (
     GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET,
     GOOGLE_REDIRECT_URI,
-    TOKENS_PATH,
+    get_tokens_path,
     SCOPES,
     DOWNLOAD_DIR,
 )
@@ -63,16 +65,16 @@ def exchange_code_for_tokens(code: str) -> dict:
         "client_secret": credentials.client_secret,
         "scopes": list(credentials.scopes) if credentials.scopes else SCOPES,
     }
-    with open(TOKENS_PATH, "w") as f:
+    with open(get_tokens_path(), "w") as f:
         json.dump(token_data, f)
     return token_data
 
 
-def load_credentials() -> Credentials | None:
+def load_credentials() -> Optional[Credentials]:
     """Load stored OAuth credentials. Refresh if expired."""
-    if not os.path.exists(TOKENS_PATH):
+    if not os.path.exists(get_tokens_path()):
         return None
-    with open(TOKENS_PATH, "r") as f:
+    with open(get_tokens_path(), "r") as f:
         token_data = json.load(f)
 
     creds = Credentials(
@@ -88,7 +90,7 @@ def load_credentials() -> Credentials | None:
     if creds.expired and creds.refresh_token:
         creds.refresh(Request())
         token_data["token"] = creds.token
-        with open(TOKENS_PATH, "w") as f:
+        with open(get_tokens_path(), "w") as f:
             json.dump(token_data, f)
 
     return creds
@@ -96,11 +98,24 @@ def load_credentials() -> Credentials | None:
 
 def is_drive_connected() -> bool:
     """Check if valid Drive credentials exist."""
-    return os.path.exists(TOKENS_PATH)
+    return os.path.exists(get_tokens_path())
 
 
-def get_drive_files() -> list[dict]:
-    """List all PDF, Google Docs, and TXT files from the user's Drive."""
+def get_user_email() -> Optional[str]:
+    """Fetch the connected user's email address."""
+    creds = load_credentials()
+    if not creds:
+        return None
+    try:
+        service = build("oauth2", "v2", credentials=creds)
+        user_info = service.userinfo().get().execute()
+        return user_info.get("email")
+    except Exception as e:
+        return None
+
+
+def get_drive_files(folder_id: str = None) -> list[dict]:
+    """List all PDF and TXT files from the user's Drive or a specific folder."""
     creds = load_credentials()
     if not creds:
         raise ValueError("Not authenticated. Please visit /auth/login first.")
@@ -109,9 +124,11 @@ def get_drive_files() -> list[dict]:
 
     query = (
         "mimeType='application/pdf' or "
-        "mimeType='application/vnd.google-apps.document' or "
         "mimeType='text/plain'"
     )
+    
+    if folder_id:
+        query = f"({query}) and '{folder_id}' in parents"
 
     results = []
     page_token = None
@@ -171,3 +188,4 @@ def download_file(file_id: str, file_name: str, mime_type: str) -> str:
         f.write(fh.getvalue())
 
     return local_path
+
